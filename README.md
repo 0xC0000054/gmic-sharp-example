@@ -2,6 +2,8 @@
 
 A Windows Forms-based example application for [gmic-sharp](https://github.com/0xC0000054/gmic-sharp).
 
+![Example App UI](images/GmicSharpExample.png "Example App UI")
+
 ## Dependencies
 
 This repository depends on libraries from the following repositories:
