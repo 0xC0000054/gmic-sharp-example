@@ -23,7 +23,7 @@ namespace GmicSharpExample
 {
     public partial class Form1 : Form
     {
-        private Gmic gmicInstance;
+        private Gmic<GdiPlusGmicBitmap> gmicInstance;
         private string imageName;
         private CancellationTokenSource cancellationToken;
         private bool formClosePending;
@@ -31,7 +31,7 @@ namespace GmicSharpExample
         public Form1()
         {
             InitializeComponent();
-            gmicInstance = new Gmic();
+            gmicInstance = new Gmic<GdiPlusGmicBitmap>(new GdiPlusOutputImageFactory());
             gmicInstance.GmicDone += GmicInstance_GmicDone;
             gmicInstance.GmicProgress += GmicInstance_GmicProgress;
             cancellationToken = null;
@@ -70,7 +70,7 @@ namespace GmicSharpExample
                 }
                 else if (!e.Canceled)
                 {
-                    GdiPlusGmicBitmap gmicBitmap = (GdiPlusGmicBitmap)gmicInstance.OutputImages[0];
+                    GdiPlusGmicBitmap gmicBitmap = gmicInstance.OutputImages[0];
 
                     pictureBox1.Image = gmicBitmap.Image;
                 }
