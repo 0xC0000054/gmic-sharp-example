@@ -16,6 +16,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -117,8 +118,31 @@ namespace GmicSharpExample
             {
                 string fileName = openFileDialog1.FileName;
 
-                pictureBox1.Image = new Bitmap(fileName);
-                imageName = Path.GetFileNameWithoutExtension(imageName);
+                try
+                {
+                    pictureBox1.Image = new Bitmap(fileName);
+                    imageName = Path.GetFileNameWithoutExtension(imageName);
+                }
+                catch (ArgumentException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
+                catch (ExternalException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
+                catch (IOException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
+                catch (OutOfMemoryException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
             }
         }
 
@@ -126,7 +150,30 @@ namespace GmicSharpExample
         {
             if (saveFileDialog1.ShowDialog(this) == DialogResult.OK)
             {
-                pictureBox1.Image.Save(saveFileDialog1.FileName, ImageFormat.Png);
+                try
+                {
+                    pictureBox1.Image.Save(saveFileDialog1.FileName, ImageFormat.Png);
+                }
+                catch (ArgumentException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
+                catch (ExternalException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
+                catch (IOException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
+                catch (OutOfMemoryException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                }
             }
         }
 
