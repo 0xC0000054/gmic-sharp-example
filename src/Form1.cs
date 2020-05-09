@@ -54,6 +54,18 @@ namespace GmicSharpExample
 
         private void GmicInstance_GmicDone(object sender, GmicCompletedEventArgs e)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<GmicCompletedEventArgs>(OnGmicDone), e);
+            }
+            else
+            {
+                OnGmicDone(e);
+            }
+        }
+
+        private void OnGmicDone(GmicCompletedEventArgs e)
+        {
             if (formClosePending)
             {
                 Close();
@@ -79,12 +91,24 @@ namespace GmicSharpExample
 
         private void GmicInstance_GmicProgress(object sender, GmicProgressEventArgs e)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<int>(OnGmicUpdateProgress), e.Progress);
+            }
+            else
+            {
+                OnGmicUpdateProgress(e.Progress);
+            }
+        }
+
+        private void OnGmicUpdateProgress(int progress)
+        {
             if (progressBar1.Style == ProgressBarStyle.Marquee)
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
             }
 
-            progressBar1.Value = e.Progress;
+            progressBar1.Value = progress;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
