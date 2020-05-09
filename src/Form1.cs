@@ -128,7 +128,27 @@ namespace GmicSharpExample
             progressBar1.Style = ProgressBarStyle.Marquee;
             statusTextLabel.Text = Resources.StatusGmicRunning;
 
-            gmicInstance.RunGmic(textBox1.Text, cancellationToken.Token);
+            try
+            {
+                gmicInstance.RunGmic(textBox1.Text, cancellationToken.Token);
+            }
+            catch (ArgumentException ex)
+            {
+                ShowErrorMessage(ex.Message);
+            }
+            catch (GmicException ex)
+            {
+                ShowErrorMessage(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ShowErrorMessage(ex.Message);
+            }
+        }
+
+        private void ShowErrorMessage(string message)
+        {
+            MessageBox.Show(this, message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
