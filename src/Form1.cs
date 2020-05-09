@@ -79,7 +79,7 @@ namespace GmicSharpExample
 
                 if (e.Error != null)
                 {
-                    MessageBox.Show(this, e.Error.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ShowErrorMessage(e.Error.Message);
                 }
                 else if (!e.Canceled)
                 {
