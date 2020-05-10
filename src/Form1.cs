@@ -215,6 +215,10 @@ namespace GmicSharpExample
             {
                 ShowErrorMessage(ex.Message);
             }
+            catch (OperationCanceledException)
+            {
+                // Ignore it
+            }
         }
 
         private void ShowErrorMessage(string message)
