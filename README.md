@@ -8,7 +8,7 @@ A Windows Forms-based example application for [gmic-sharp](https://github.com/0x
 
 This repository depends on libraries from the following repositories:
 
-[gmic-sharp](https://github.com/0xC0000054/gmic-sharp), the library that this application uses.
+[gmic-sharp](https://github.com/0xC0000054/gmic-sharp), the library that this application uses.   
 [gmic-sharp-native](https://github.com/0xC0000054/gmic-sharp-native), provides the native interface between gmic-sharp and [libgmic](https://github.com/dtschump/gmic).
 
 ## License
