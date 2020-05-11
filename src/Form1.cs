@@ -191,7 +191,10 @@ namespace GmicSharpExample
 
             if (pictureBox1.Image != null)
             {
-                gmicInstance.AddInputImage(new GdiPlusGmicBitmap(pictureBox1.Image), imageName);
+                using (GdiPlusGmicBitmap image = new GdiPlusGmicBitmap(pictureBox1.Image))
+                {
+                    gmicInstance.AddInputImage(image, imageName);
+                }
             }
 
             cancellationToken?.Dispose();
