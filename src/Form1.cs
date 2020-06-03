@@ -84,9 +84,12 @@ namespace GmicSharpExample
 
                     try
                     {
-                        GdiPlusGmicBitmap gmicBitmap = outputImages[0];
+                        if (outputImages.Count > 0)
+                        {
+                            GdiPlusGmicBitmap gmicBitmap = outputImages[0];
 
-                        pictureBox1.Image = (Image)gmicBitmap.Image.Clone();
+                            pictureBox1.Image = (Image)gmicBitmap.Image.Clone();
+                        }
                     }
                     finally
                     {
