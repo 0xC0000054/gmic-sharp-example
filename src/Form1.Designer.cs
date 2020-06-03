@@ -19,7 +19,6 @@ namespace GmicSharpExample
             {
                 components?.Dispose();
                 gmicInstance?.Dispose();
-                cancellationToken?.Dispose();
             }
             base.Dispose(disposing);
         }

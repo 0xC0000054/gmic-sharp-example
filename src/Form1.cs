@@ -17,7 +17,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace GmicSharpExample
@@ -26,46 +25,44 @@ namespace GmicSharpExample
     {
         private Gmic<GdiPlusGmicBitmap> gmicInstance;
         private string imageName;
-        private CancellationTokenSource cancellationToken;
         private bool formClosePending;
 
         public Form1()
         {
             InitializeComponent();
             gmicInstance = new Gmic<GdiPlusGmicBitmap>(new GdiPlusOutputImageFactory());
-            gmicInstance.GmicDone += GmicInstance_GmicDone;
-            gmicInstance.GmicProgress += GmicInstance_GmicProgress;
-            cancellationToken = null;
+            gmicInstance.RunGmicCompleted += GmicInstance_RunGmicCompleted;
+            gmicInstance.RunGmicProgressChanged += GmicInstance_RunGmicProgressChanged;
             formClosePending = false;
             statusTextLabel.Text = string.Empty;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (gmicInstance.GmicRunning)
+            if (gmicInstance.IsBusy)
             {
                 statusTextLabel.Text = Resources.StatusCanceling;
                 formClosePending = true;
-                cancellationToken.Cancel();
+                gmicInstance.RunGmicAsyncCancel();
                 e.Cancel = true;
             }
 
             base.OnFormClosing(e);
         }
 
-        private void GmicInstance_GmicDone(object sender, GmicCompletedEventArgs e)
+        private void GmicInstance_RunGmicCompleted(object sender, RunGmicCompletedEventArgs<GdiPlusGmicBitmap> e)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action<GmicCompletedEventArgs>(OnGmicDone), e);
+                Invoke(new Action<RunGmicCompletedEventArgs<GdiPlusGmicBitmap>>(OnRunGmicCompleted), e);
             }
             else
             {
-                OnGmicDone(e);
+                OnRunGmicCompleted(e);
             }
         }
 
-        private void OnGmicDone(GmicCompletedEventArgs e)
+        private void OnRunGmicCompleted(RunGmicCompletedEventArgs<GdiPlusGmicBitmap> e)
         {
             if (formClosePending)
             {
@@ -81,24 +78,33 @@ namespace GmicSharpExample
                 {
                     ShowErrorMessage(e.Error.Message);
                 }
-                else if (!e.Canceled)
+                else if (!e.Cancelled)
                 {
-                    GdiPlusGmicBitmap gmicBitmap = gmicInstance.OutputImages[0];
+                    OutputImageCollection<GdiPlusGmicBitmap> outputImages = e.OutputImages;
 
-                    pictureBox1.Image = (Image)gmicBitmap.Image.Clone();
+                    try
+                    {
+                        GdiPlusGmicBitmap gmicBitmap = outputImages[0];
+
+                        pictureBox1.Image = (Image)gmicBitmap.Image.Clone();
+                    }
+                    finally
+                    {
+                        outputImages.Dispose();
+                    }
                 }
             }
         }
 
-        private void GmicInstance_GmicProgress(object sender, GmicProgressEventArgs e)
+        private void GmicInstance_RunGmicProgressChanged(object sender, RunGmicProgressChangedEventArgs e)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action<int>(OnGmicUpdateProgress), e.Progress);
+                Invoke(new Action<int>(OnGmicUpdateProgress), e.ProgressPercentage);
             }
             else
             {
-                OnGmicUpdateProgress(e.Progress);
+                OnGmicUpdateProgress(e.ProgressPercentage);
             }
         }
 
@@ -197,14 +203,12 @@ namespace GmicSharpExample
                 }
             }
 
-            cancellationToken?.Dispose();
-            cancellationToken = new CancellationTokenSource();
             progressBar1.Style = ProgressBarStyle.Marquee;
             statusTextLabel.Text = Resources.StatusGmicRunning;
 
             try
             {
-                gmicInstance.RunGmic(textBox1.Text, cancellationToken.Token);
+                gmicInstance.RunGmicAsync(textBox1.Text);
             }
             catch (ArgumentException ex)
             {
@@ -217,10 +221,6 @@ namespace GmicSharpExample
             catch (InvalidOperationException ex)
             {
                 ShowErrorMessage(ex.Message);
-            }
-            catch (OperationCanceledException)
-            {
-                // Ignore it
             }
         }
 
