@@ -121,6 +121,6 @@
     <value>G'MIC canceling...</value>
   </data>
   <data name="StatusGmicRunning" xml:space="preserve">
-    <value>G'MIC running...</value>
+    <value>Running G'MIC command, press Escape to cancel.</value>
   </data>
 </root>

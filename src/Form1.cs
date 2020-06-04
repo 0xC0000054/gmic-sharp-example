@@ -50,6 +50,21 @@ namespace GmicSharpExample
             base.OnFormClosing(e);
         }
 
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            // Cancel the running G'MIC commands if the user presses escape.
+            if ((keyData & Keys.KeyCode) == Keys.Escape &&
+                (keyData & Keys.Modifiers) == Keys.None &&
+                gmicInstance.IsBusy)
+            {
+                toolStripStatusLabel1.Text = Resources.StatusCanceling;
+                gmicInstance.RunGmicAsyncCancel();
+                return true;
+            }
+
+            return base.ProcessDialogKey(keyData);
+        }
+
         private void GmicInstance_RunGmicCompleted(object sender, RunGmicCompletedEventArgs<GdiPlusGmicBitmap> e)
         {
             if (InvokeRequired)
