@@ -34,14 +34,14 @@ namespace GmicSharpExample
             gmicInstance.RunGmicCompleted += GmicInstance_RunGmicCompleted;
             gmicInstance.RunGmicProgressChanged += GmicInstance_RunGmicProgressChanged;
             formClosePending = false;
-            statusTextLabel.Text = string.Empty;
+            toolStripStatusLabel1.Text = string.Empty;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (gmicInstance.IsBusy)
             {
-                statusTextLabel.Text = Resources.StatusCanceling;
+                toolStripStatusLabel1.Text = Resources.StatusCanceling;
                 formClosePending = true;
                 gmicInstance.RunGmicAsyncCancel();
                 e.Cancel = true;
@@ -70,9 +70,8 @@ namespace GmicSharpExample
             }
             else
             {
-                progressBar1.Style = ProgressBarStyle.Continuous;
-                progressBar1.Value = 0;
-                statusTextLabel.Text = string.Empty;
+                toolStripProgressBar1.Visible = false;
+                toolStripStatusLabel1.Text = string.Empty;
 
                 if (e.Error != null)
                 {
@@ -113,12 +112,12 @@ namespace GmicSharpExample
 
         private void OnGmicUpdateProgress(int progress)
         {
-            if (progressBar1.Style == ProgressBarStyle.Marquee)
+            if (toolStripProgressBar1.Style == ProgressBarStyle.Marquee)
             {
-                progressBar1.Style = ProgressBarStyle.Continuous;
+                toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
             }
 
-            progressBar1.Value = progress;
+            toolStripProgressBar1.Value = progress;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -206,8 +205,9 @@ namespace GmicSharpExample
                 }
             }
 
-            progressBar1.Style = ProgressBarStyle.Marquee;
-            statusTextLabel.Text = Resources.StatusGmicRunning;
+            toolStripProgressBar1.Style = ProgressBarStyle.Marquee;
+            toolStripProgressBar1.Visible = true;
+            toolStripStatusLabel1.Text = Resources.StatusGmicRunning;
 
             try
             {
