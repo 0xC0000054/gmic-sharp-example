@@ -116,9 +116,9 @@ namespace GmicSharpExample
             this.gmicCommandLabel.AutoSize = true;
             this.gmicCommandLabel.Location = new System.Drawing.Point(13, 443);
             this.gmicCommandLabel.Name = "gmicCommandLabel";
-            this.gmicCommandLabel.Size = new System.Drawing.Size(83, 13);
+            this.gmicCommandLabel.Size = new System.Drawing.Size(88, 13);
             this.gmicCommandLabel.TabIndex = 2;
-            this.gmicCommandLabel.Text = "Gmic command:";
+            this.gmicCommandLabel.Text = "Gmic commands:";
             // 
             // textBox1
             // 

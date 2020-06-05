@@ -70,7 +70,7 @@ namespace GmicSharpExample.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Running G&apos;MIC command, press Escape to cancel..
+        ///   Looks up a localized string similar to Running G&apos;MIC commands, press Escape to cancel..
         /// </summary>
         internal static string StatusGmicRunning {
             get {
