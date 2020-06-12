@@ -67,18 +67,6 @@ namespace GmicSharpExample
 
         private void GmicInstance_RunGmicCompleted(object sender, RunGmicCompletedEventArgs<GdiPlusGmicBitmap> e)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new Action<RunGmicCompletedEventArgs<GdiPlusGmicBitmap>>(OnRunGmicCompleted), e);
-            }
-            else
-            {
-                OnRunGmicCompleted(e);
-            }
-        }
-
-        private void OnRunGmicCompleted(RunGmicCompletedEventArgs<GdiPlusGmicBitmap> e)
-        {
             if (formClosePending)
             {
                 Close();
@@ -115,24 +103,12 @@ namespace GmicSharpExample
 
         private void GmicInstance_RunGmicProgressChanged(object sender, RunGmicProgressChangedEventArgs e)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new Action<int>(OnGmicUpdateProgress), e.ProgressPercentage);
-            }
-            else
-            {
-                OnGmicUpdateProgress(e.ProgressPercentage);
-            }
-        }
-
-        private void OnGmicUpdateProgress(int progress)
-        {
             if (toolStripProgressBar1.Style == ProgressBarStyle.Marquee)
             {
                 toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
             }
 
-            toolStripProgressBar1.Value = progress;
+            toolStripProgressBar1.Value = e.ProgressPercentage;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
